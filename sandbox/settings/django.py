@@ -1,11 +1,12 @@
 from pathlib import Path
 
+from sandbox.utils import get_env_variable, str_to_bool
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-6wo(z%v#@bka)r9u2cr^uvfqn-ctb=o3tl%qokb4lc1h4!7wo*'
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = str_to_bool(get_env_variable('DEBUG'))
 
 ALLOWED_HOSTS = []
 

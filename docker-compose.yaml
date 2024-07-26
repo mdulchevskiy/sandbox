@@ -1,0 +1,49 @@
+services:
+  sandbox-db-service:
+    container_name: sandbox-db-container
+    image: 'postgres:16.3-alpine'
+    ports:
+      - '${DATABASE_HOST_PORT}:${DATABASE_CONTAINER_PORT}'
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_HOST=${DATABASE_CONTAINER_HOST}
+      - POSTGRES_PORT=${DATABASE_CONTAINER_PORT}
+    env_file:
+      - .env
+    volumes:
+      # We mount our custom folder to /docker-entrypoint-initdb.d/ folder in which the
+      # official postgres docker image runs .sql scripts (alphabet order) found in it.
+      - './docker/backups/$DATABASE_ENVIRONMENT:/docker-entrypoint-initdb.d'
+      # We can mount either directory (./docker/backups/$DATABASE_ENVIRONMENT/db_data)
+      # or virtual volume (db_data) to postgres data.
+      - 'db_data:/var/lib/postgresql/data'
+    privileged: true
+
+  sandbox-api-service:
+    container_name: sandbox-api-container
+    image: sandbox-api-container
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '${HOST_PORT}:${HOST_PORT}'
+    env_file:
+      - .env
+    volumes:
+      - ./:/code/
+    entrypoint: [
+      '../wait-for-it.sh', '${DATABASE_CONTAINER_HOST}:${DATABASE_CONTAINER_PORT}',
+      '--timeout=${DATABASE_WAIT_TIMEOUT}', '--',
+    ]
+    command: [
+      'python', 'manage.py', 'runserver', '0.0.0.0:${HOST_PORT}',
+    ]
+    depends_on:
+      - sandbox-db-service
+
+volumes:
+  db_data:
+    name: sandbox_db_volume_$DATABASE_ENVIRONMENT
