@@ -21,6 +21,24 @@ services:
       - 'db_data:/var/lib/postgresql/data'
     privileged: true
 
+  sandbox-db-migrator-service:
+    container_name: sandbox-db-migrator-container
+    image: sandbox-api-container
+    platform: linux/amd64
+    env_file:
+      - .env
+    volumes:
+      - ./:/code/
+    entrypoint: [
+      '../wait-for-it.sh', '${DATABASE_CONTAINER_HOST}:${DATABASE_CONTAINER_PORT}',
+      '--timeout=${DATABASE_WAIT_TIMEOUT}', '--',
+    ]
+    command: [
+      'python', 'manage.py', 'migrate',
+    ]
+    depends_on:
+      - sandbox-db-service
+
   sandbox-api-service:
     container_name: sandbox-api-container
     image: sandbox-api-container

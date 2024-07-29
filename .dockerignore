@@ -1,0 +1,41 @@
+# PyCharm project files
+/.idea
+
+# backups (usefull for development with Docker)
+docker/backups/*/*
+!docker/backups/*/a_create_all_roles.sql
+!docker/backups/*/z_set_passwords.sql
+
+# django static files and media folders
+/static
+/media
+
+# app logs
+*.log
+
+# other files
+*localhost.py
+*.pyc
+*.pid
+/*.xlsx
+/*.html
+celerybeat-schedule
+.DS_Store
+*.patch
+
+*.sh
+!wait-for-it.sh
+
+# Code analysis reports
+/coverage_html_report
+/.coverage
+ca_report_*.txt
+/scripts/
+
+# Docker related files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+#SQL
+*.sql
