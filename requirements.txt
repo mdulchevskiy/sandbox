@@ -3,3 +3,6 @@ psycopg2-binary==2.9.9
 
 # Django
 Django==5.0.7
+
+# Utils
+uuid==1.30

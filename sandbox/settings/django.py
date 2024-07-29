@@ -2,6 +2,7 @@ from pathlib import Path
 
 from sandbox.utils import get_env_variable, str_to_bool
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = get_env_variable('SECRET_KEY')
@@ -91,4 +92,6 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+AUTH_USER_MODEL = 'sandbox.User'
