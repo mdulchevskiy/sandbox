@@ -30,7 +30,7 @@ services:
     volumes:
       - ./:/code/
     entrypoint: [
-      '../wait-for-it.sh', '${DATABASE_CONTAINER_HOST}:${DATABASE_CONTAINER_PORT}',
+      '/wait-for-it.sh', '${DATABASE_CONTAINER_HOST}:${DATABASE_CONTAINER_PORT}',
       '--timeout=${DATABASE_WAIT_TIMEOUT}', '--',
     ]
     command: [
@@ -53,7 +53,7 @@ services:
     volumes:
       - ./:/code/
     entrypoint: [
-      '../wait-for-it.sh', '${DATABASE_CONTAINER_HOST}:${DATABASE_CONTAINER_PORT}',
+      '/wait-for-it.sh', '${DATABASE_CONTAINER_HOST}:${DATABASE_CONTAINER_PORT}',
       '--timeout=${DATABASE_WAIT_TIMEOUT}', '--',
     ]
     command: [
