@@ -1,6 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
 from django.forms import model_to_dict
-from django.middleware.csrf import get_token
 from rest_framework.exceptions import AuthenticationFailed
 
 from sandbox.helpers import (JSONResponse,
@@ -28,7 +27,6 @@ class AuthAPI(SandboxGenericView):
                 'session_id': request.session.session_key,
             }
             response = JSONResponse(response_data)
-            response['X-CSRFToken'] = get_token(request)
 
             return response
 
