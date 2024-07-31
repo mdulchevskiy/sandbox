@@ -1,2 +1,3 @@
-from .django import *
+from .cache import *
 from .db import *
+from .django import *

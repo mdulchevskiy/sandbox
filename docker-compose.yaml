@@ -21,6 +21,14 @@ services:
       - 'db_data:/var/lib/postgresql/data'
     privileged: true
 
+  sandbox-redis-service:
+    container_name: sandbox-redis-service
+    image: redis
+    ports:
+      - '${CACHE_HOST_PORT}:${CACHE_CONTAINER_PORT}'
+    volumes:
+      - 'redis_data:/data'
+
   sandbox-db-migrator-service:
     container_name: sandbox-db-migrator-container
     image: sandbox-api-container
@@ -38,6 +46,7 @@ services:
     ]
     depends_on:
       - sandbox-db-service
+      - sandbox-redis-service
 
   sandbox-api-service:
     container_name: sandbox-api-container
@@ -47,7 +56,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '${HOST_PORT}:${HOST_PORT}'
+      - '${API_HOST_PORT}:${API_CONTAINER_PORT}'
     env_file:
       - .env
     volumes:
@@ -57,11 +66,14 @@ services:
       '--timeout=${DATABASE_WAIT_TIMEOUT}', '--',
     ]
     command: [
-      'python', 'manage.py', 'runserver', '0.0.0.0:${HOST_PORT}',
+      'python', 'manage.py', 'runserver', '0.0.0.0:${API_CONTAINER_PORT}',
     ]
     depends_on:
       - sandbox-db-service
+      - sandbox-redis-service
 
 volumes:
   db_data:
     name: sandbox_db_volume_$DATABASE_ENVIRONMENT
+  redis_data:
+    name: sandbox_redis_volume
