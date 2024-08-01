@@ -9,3 +9,4 @@ django-redis==5.4.0
 
 # Utils
 uuid==1.30
+pycountry==24.6.1
